@@ -1,10 +1,149 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace MariSocketMiddleware
 {
     public static class MariWebSocketMiddlewareExtensions
     {
+        /// <summary>
+        /// Enable WebSockets requests and add the <see cref="MariWebSocketMiddleware"/> to your app.
+        /// </summary>
+        /// <param name="app">The <see cref="IApplicationBuilder"/>.</param>
+        /// <returns></returns>
+        public static IApplicationBuilder UseMariWebSockets(this IApplicationBuilder app)
+        {
+            app.UseWebSockets();
+            app.UseMiddleware<MariWebSocketMiddleware>();
+            return app;
+        }
+
+        /// <summary>
+        /// Enable WebSockets requests and add the <see cref="MariWebSocketMiddleware"/> to your app.
+        /// </summary>
+        /// <param name="app">The <see cref="IApplicationBuilder"/>.</param>
+        /// <param name="options">The base <see cref="WebSocketOptions"/>.</param>
+        /// <returns></returns>
+        public static IApplicationBuilder UseMariWebSockets(this IApplicationBuilder app, WebSocketOptions options)
+        {
+            app.UseWebSockets(options);
+            app.UseMiddleware<MariWebSocketMiddleware>();
+            return app;
+        }
+
+        /// <summary>
+        /// Enable WebSockets requests and add the <see cref="MariWebSocketMiddleware"/> to your app.
+        /// </summary>
+        /// <param name="app">The <see cref="IApplicationBuilder"/>.</param>
+        /// <param name="configure">An <see cref="Action"/>to configure the base <see cref="WebSocketOptions"/>.</param>
+        /// <returns></returns>
+        public static IApplicationBuilder UseMariWebSockets(this IApplicationBuilder app, Action<WebSocketOptions> configure)
+        {
+            var options = new WebSocketOptions();
+            configure(options);
+            return app.UseMariWebSockets(options);
+        }
+
+        public static IServiceCollection AddMariWebSocketService<T>(this IServiceCollection services, T serviceIstance)
+            where T : MariWebSocketService
+        {
+            services.AddSingleton<IMariWebSocketService>(serviceIstance);
+            return services;
+        }
+
+        /// <summary>
+        /// Add a MariWebSocketService.
+        /// </summary>
+        /// <typeparam name="T">A type that inherits from <see cref="MariWebSocketService"/></typeparam>
+        /// <param name="services">The <see cref="IServiceCollection"/>.</param>
+        /// <returns></returns>
+        public static IServiceCollection AddMariWebSocketService<T>(this IServiceCollection services)
+            where T : MariWebSocketService
+        {
+            services.AddSingleton<IMariWebSocketService, T>();
+            return services;
+        }
+
+        /// <summary>
+        /// Try await the task and calls
+        /// <see cref="MariWebSocketService.OnErrorAsync(Exception)"/>
+        /// if a exception throws.
+        /// </summary>
+        /// <typeparam name="T">The <see cref="ILogger"/> type.</typeparam>
+        /// <param name="task">The <see cref="Task"/> that will await.</param>
+        /// <param name="logger">The ASP.NET Core <see cref="ILogger"/> for the Middleware.</param>
+        /// <param name="service">The Socketservice.</param>
+        /// <param name="cancel">A Boolen indicates if that Method will throw the exception or not.</param>
+        /// <returns></returns>
+        internal static async Task Try<T>
+            (this Task task, ILogger<T> logger, MariWebSocketService service, MariWebSocket socket, bool cancel = true)
+        {
+            try
+            {
+                await task;
+            }
+            catch (Exception ex)
+            {
+                await HandleExceptionFromTryAsync(ex, logger, service, socket, cancel);
+            }
+        }
+
+        /// <summary>
+        /// Try await the Task and calls
+        /// <see cref="MariWebSocketService.OnErrorAsync(Exception)"/>
+        /// if a exception throws.
+        /// </summary>
+        /// <typeparam name="T">The <see cref="ILogger"/> type.</typeparam>
+        /// <typeparam name="TResult">The Result of the awaitable Task.</typeparam>
+        /// <param name="task">The <see cref="Task"/> that will await.</param>
+        /// <param name="logger">The ASP.NET Core <see cref="ILogger"/> for the Middleware.</param>
+        /// <param name="service">The Socketservice.</param>
+        /// <param name="cancel">A Boolen indicates if that Method will throw the exception or not.</param>
+        /// <returns>A <see cref="Task"/> with the result (will return default if a exception is catched).
+        /// </returns>
+        internal static async Task<TResult> Try<T, TResult>
+            (this Task<TResult> task, ILogger<T> logger, MariWebSocketService service, MariWebSocket socket, bool cancel = true)
+        {
+            try
+            {
+                var memResult =
+                    new ReadOnlyMemory<TResult>(new TResult[] { await task });
+
+                return memResult.Span[0];
+            }
+            catch (Exception ex)
+            {
+                await HandleExceptionFromTryAsync(ex, logger, service, socket, cancel);
+            }
+            return default;
+        }
+
+        private static async Task HandleExceptionFromTryAsync<T>
+            (Exception ex, ILogger<T> logger, MariWebSocketService service, MariWebSocket socket, bool cancel)
+        {
+            await service.OnErrorAsync(ex, socket);
+
+            if (cancel)
+                throw ex;
+            else if (logger.HasContent())
+                logger.LogError(ex, ex.Message);
+        }
+
+        internal static bool HasContent(this object obj)
+            => obj != null;
+
+        internal static bool HasNoContent(this object obj)
+            => !HasContent(obj);
+
+        internal static bool HasContent<T>(this IEnumerable<T> obj)
+            => obj != null && obj.Any();
+
+        internal static bool HasNoContent<T>(this IEnumerable<T> obj)
+            => !HasContent(obj);
     }
 }
