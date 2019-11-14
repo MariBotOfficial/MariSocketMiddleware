@@ -11,11 +11,17 @@ using System.Threading.Tasks;
 
 namespace MariSocketMiddleware
 {
+    /// <summary>
+    /// The base WebSocketService.
+    /// </summary>
     public abstract class MariWebSocketService : IMariWebSocketService
     {
         private readonly ConcurrentDictionary<string, MariWebSocket> Sockets;
         internal readonly CancellationTokenSource Cts;
 
+        /// <summary>
+        /// Creates a Instance of the base <see cref="MariWebSocketService"/>.
+        /// </summary>
         public MariWebSocketService()
         {
             Sockets = new ConcurrentDictionary<string, MariWebSocket>();
@@ -40,14 +46,14 @@ namespace MariSocketMiddleware
         /// <summary>
         /// The method that will authorize or not the request,
         /// </summary>
-        /// <param name="context">The HttpContext of the request,</param>
+        /// <param name="context">The <see cref="HttpContext"/> of the request,</param>
         /// <returns>A boolean that represents true for authorized or for unauthorized.</returns>
         public abstract Task<bool> AuthorizeAsync(HttpContext context);
 
         /// <summary>
         /// Indicates when a WebSocket connection is successfully opened.
         /// </summary>
-        /// <param name="webSocket">The webSocket connected.</param>
+        /// <param name="webSocket">The <see cref="MariWebSocket"/> connected.</param>
         /// <returns></returns>
         public abstract Task OnOpenAsync(MariWebSocket webSocket);
 
@@ -55,6 +61,7 @@ namespace MariSocketMiddleware
         /// Indicates when an error occurs.
         /// </summary>
         /// <param name="exception">The Exception throwed.</param>
+        /// <param name="socket">The <see cref="MariWebSocket"/> where the error ocurried, can be null.</param>
         /// <returns></returns>
         public abstract Task OnErrorAsync(Exception exception, MariWebSocket socket);
 
@@ -99,7 +106,7 @@ namespace MariSocketMiddleware
         /// Be careful, this method don't close or dispose the WebSocket client,
         /// if you want that just <see cref="MariWebSocket.Dispose"/> him.
         /// </summary>
-        /// <param name="socket">The <see cref="MariWebSocket.Id"/> to remove from the cache.</param>
+        /// <param name="id">The <see cref="MariWebSocket.Id"/> to remove from the cache.</param>
         protected void RemoveClient(string id)
             => Sockets.TryRemove(id, out var _);
 

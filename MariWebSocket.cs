@@ -7,8 +7,14 @@ using System.Threading.Tasks;
 
 namespace MariSocketMiddleware
 {
+    /// <summary>
+    /// Represents a WebSocket client.
+    /// </summary>
     public readonly struct MariWebSocket : IDisposable
     {
+        /// <summary>
+        /// The unique identifier for this WebSocket.
+        /// </summary>
         public readonly string Id;
 
         internal readonly WebSocket WebSocket;

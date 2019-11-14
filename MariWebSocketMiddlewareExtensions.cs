@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace MariSocketMiddleware
 {
+    /// <summary>
+    /// Extensions for the MariWebSocketMiddleware package.
+    /// </summary>
     public static class MariWebSocketMiddlewareExtensions
     {
         /// <summary>
@@ -49,6 +52,13 @@ namespace MariSocketMiddleware
             return app.UseMariWebSockets(options);
         }
 
+        /// <summary>
+        /// Add a MariWebSocketService.
+        /// </summary>
+        /// <typeparam name="T">A type that inherits from <see cref="MariWebSocketService"/>.</typeparam>
+        /// <param name="services">The <see cref="IServiceCollection"/>.</param>
+        /// <param name="serviceIstance">An instance of your inherited <see cref="MariWebSocketService"/>.</param>
+        /// <returns></returns>
         public static IServiceCollection AddMariWebSocketService<T>(this IServiceCollection services, T serviceIstance)
             where T : MariWebSocketService
         {
@@ -71,13 +81,14 @@ namespace MariSocketMiddleware
 
         /// <summary>
         /// Try await the task and calls
-        /// <see cref="MariWebSocketService.OnErrorAsync(Exception)"/>
+        /// <see cref="MariWebSocketService"/>#OnErroAsync
         /// if a exception throws.
         /// </summary>
         /// <typeparam name="T">The <see cref="ILogger"/> type.</typeparam>
         /// <param name="task">The <see cref="Task"/> that will await.</param>
         /// <param name="logger">The ASP.NET Core <see cref="ILogger"/> for the Middleware.</param>
         /// <param name="service">The Socketservice.</param>
+        /// <param name="socket">The <see cref="MariWebSocket"/>.</param>
         /// <param name="cancel">A Boolen indicates if that Method will throw the exception or not.</param>
         /// <returns></returns>
         internal static async Task Try<T>
@@ -95,7 +106,7 @@ namespace MariSocketMiddleware
 
         /// <summary>
         /// Try await the Task and calls
-        /// <see cref="MariWebSocketService.OnErrorAsync(Exception)"/>
+        /// <see cref="MariWebSocketService"/>#OnErroAsync
         /// if a exception throws.
         /// </summary>
         /// <typeparam name="T">The <see cref="ILogger"/> type.</typeparam>
@@ -103,6 +114,7 @@ namespace MariSocketMiddleware
         /// <param name="task">The <see cref="Task"/> that will await.</param>
         /// <param name="logger">The ASP.NET Core <see cref="ILogger"/> for the Middleware.</param>
         /// <param name="service">The Socketservice.</param>
+        /// <param name="socket">The <see cref="MariWebSocket"/>.</param>
         /// <param name="cancel">A Boolen indicates if that Method will throw the exception or not.</param>
         /// <returns>A <see cref="Task"/> with the result (will return default if a exception is catched).
         /// </returns>

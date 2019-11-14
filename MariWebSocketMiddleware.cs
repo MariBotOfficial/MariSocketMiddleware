@@ -10,12 +10,21 @@ using System.Threading.Tasks;
 
 namespace MariSocketMiddleware
 {
+    /// <summary>
+    /// The <see cref="MariWebSocketMiddleware"/>.
+    /// </summary>
     public readonly struct MariWebSocketMiddleware
     {
         private readonly RequestDelegate _next;
         private readonly IServiceProvider _services;
         private readonly ILogger<MariWebSocketMiddleware> _logger;
 
+        /// <summary>
+        /// Create a instance of the <see cref="MariWebSocketMiddleware"/>.
+        /// </summary>
+        /// <param name="next">The <see cref="RequestDelegate"/></param>
+        /// <param name="services">Your <see cref="IServiceProvider"/>.</param>
+        /// <param name="logger">An <see cref="ILogger"/> for the <see cref="MariWebSocketMiddleware"/>.</param>
         public MariWebSocketMiddleware(
             RequestDelegate next, IServiceProvider services, ILogger<MariWebSocketMiddleware> logger)
         {
@@ -26,6 +35,11 @@ namespace MariSocketMiddleware
 
         #region Invoke
 
+        /// <summary>
+        /// The request handler (you can pass other depencies in the ctor).
+        /// </summary>
+        /// <param name="context">The request context.</param>
+        /// <returns></returns>
         public async Task Invoke(HttpContext context)
         {
             if (!context.WebSockets.IsWebSocketRequest)
