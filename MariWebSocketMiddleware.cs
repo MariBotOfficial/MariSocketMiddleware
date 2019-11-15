@@ -61,7 +61,7 @@ namespace MariSocketMiddleware
         private async Task HandleBeforeSocketAsync(HttpContext context)
         {
             var service = _services.GetServices<IMariWebSocketService>()
-                .Select(a => a as MariWebSocketService)
+                .Select(a => a as MariBaseWebSocketService)
                 .Where(a => context.Request.Path.Equals(a.Path, StringComparison.OrdinalIgnoreCase))
                 .FirstOrDefault();
 
@@ -106,7 +106,7 @@ namespace MariSocketMiddleware
         #region HandleAfterSocketAsync
 
         private async Task HandleAfterSocketAsync
-            (WebSocket nativeSocket, MariWebSocketService service, HttpContext context)
+            (WebSocket nativeSocket, MariBaseWebSocketService service, HttpContext context)
         {
             var socket = new MariWebSocket(nativeSocket, service.Cts.Token, service);
             _logger.LogDebug($"The new WebSocket has the Id: {socket.Id}");
@@ -128,7 +128,7 @@ namespace MariSocketMiddleware
         #region ReadAsync
 
         private async Task ReadAsync
-            (MariWebSocket socket, MariWebSocketService service, HttpContext context)
+            (MariWebSocket socket, MariBaseWebSocketService service, HttpContext context)
         {
             while (socket.WebSocket.State == WebSocketState.Open)
             {
@@ -149,7 +149,7 @@ namespace MariSocketMiddleware
 
         private async Task ReadMessageAsync
             (WebSocketReceiveResult result, byte[] buffer,
-            MariWebSocketService service, MariWebSocket socket, HttpContext context)
+            MariBaseWebSocketService service, MariWebSocket socket, HttpContext context)
         {
             if (!result.EndOfMessage)
                 return;

@@ -20,9 +20,9 @@ namespace MariSocketMiddleware
         internal readonly WebSocket WebSocket;
 
         private readonly CancellationToken _token;
-        private readonly MariWebSocketService _service;
+        private readonly MariBaseWebSocketService _service;
 
-        internal MariWebSocket(WebSocket webSocket, CancellationToken token, MariWebSocketService service)
+        internal MariWebSocket(WebSocket webSocket, CancellationToken token, MariBaseWebSocketService service)
         {
             Id = Guid.NewGuid().ToString();
             WebSocket = webSocket;

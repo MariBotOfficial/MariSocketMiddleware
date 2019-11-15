@@ -55,12 +55,12 @@ namespace MariSocketMiddleware
         /// <summary>
         /// Add a MariWebSocketService.
         /// </summary>
-        /// <typeparam name="T">A type that inherits from <see cref="MariWebSocketService"/>.</typeparam>
+        /// <typeparam name="T">A type that inherits from <see cref="MariBaseWebSocketService"/>.</typeparam>
         /// <param name="services">The <see cref="IServiceCollection"/>.</param>
-        /// <param name="serviceIstance">An instance of your inherited <see cref="MariWebSocketService"/>.</param>
+        /// <param name="serviceIstance">An instance of your inherited <see cref="MariBaseWebSocketService"/>.</param>
         /// <returns></returns>
         public static IServiceCollection AddMariWebSocketService<T>(this IServiceCollection services, T serviceIstance)
-            where T : MariWebSocketService
+            where T : MariBaseWebSocketService
         {
             services.AddSingleton<IMariWebSocketService>(serviceIstance);
             return services;
@@ -69,11 +69,11 @@ namespace MariSocketMiddleware
         /// <summary>
         /// Add a MariWebSocketService.
         /// </summary>
-        /// <typeparam name="T">A type that inherits from <see cref="MariWebSocketService"/></typeparam>
+        /// <typeparam name="T">A type that inherits from <see cref="MariBaseWebSocketService"/></typeparam>
         /// <param name="services">The <see cref="IServiceCollection"/>.</param>
         /// <returns></returns>
         public static IServiceCollection AddMariWebSocketService<T>(this IServiceCollection services)
-            where T : MariWebSocketService
+            where T : MariBaseWebSocketService
         {
             services.AddSingleton<IMariWebSocketService, T>();
             return services;
@@ -81,7 +81,7 @@ namespace MariSocketMiddleware
 
         /// <summary>
         /// Try await the task and calls
-        /// <see cref="MariWebSocketService"/>#OnErroAsync
+        /// <see cref="MariBaseWebSocketService"/>#OnErroAsync
         /// if a exception throws.
         /// </summary>
         /// <typeparam name="T">The <see cref="ILogger"/> type.</typeparam>
@@ -92,7 +92,7 @@ namespace MariSocketMiddleware
         /// <param name="cancel">A Boolen indicates if that Method will throw the exception or not.</param>
         /// <returns></returns>
         internal static async Task Try<T>
-            (this Task task, ILogger<T> logger, MariWebSocketService service, MariWebSocket socket, bool cancel = true)
+            (this Task task, ILogger<T> logger, MariBaseWebSocketService service, MariWebSocket socket, bool cancel = true)
         {
             try
             {
@@ -106,7 +106,7 @@ namespace MariSocketMiddleware
 
         /// <summary>
         /// Try await the Task and calls
-        /// <see cref="MariWebSocketService"/>#OnErroAsync
+        /// <see cref="MariBaseWebSocketService"/>#OnErroAsync
         /// if a exception throws.
         /// </summary>
         /// <typeparam name="T">The <see cref="ILogger"/> type.</typeparam>
@@ -119,7 +119,7 @@ namespace MariSocketMiddleware
         /// <returns>A <see cref="Task"/> with the result (will return default if a exception is catched).
         /// </returns>
         internal static async Task<TResult> Try<T, TResult>
-            (this Task<TResult> task, ILogger<T> logger, MariWebSocketService service, MariWebSocket socket, bool cancel = true)
+            (this Task<TResult> task, ILogger<T> logger, MariBaseWebSocketService service, MariWebSocket socket, bool cancel = true)
         {
             try
             {
@@ -136,7 +136,7 @@ namespace MariSocketMiddleware
         }
 
         private static async Task HandleExceptionFromTryAsync<T>
-            (Exception ex, ILogger<T> logger, MariWebSocketService service, MariWebSocket socket, bool cancel)
+            (Exception ex, ILogger<T> logger, MariBaseWebSocketService service, MariWebSocket socket, bool cancel)
         {
             await service.OnErrorAsync(ex, socket);
 
