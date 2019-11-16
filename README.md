@@ -4,7 +4,7 @@ An ASP.NET Core Middleware Event-based for multiple WebSockets services with eas
 
 
 # Usage
-**MariSocketMiddleware** is very easy to use just implement that in your ASP.NET core project.
+**MariSocketMiddleware** is very easy to use, just implement that in your ASP.NET core project.
 
 ## Service class
 ```csharp 
