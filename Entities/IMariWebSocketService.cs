@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MariSocketMiddleware
+namespace MariSocketMiddleware.Entities
 {
     /// <summary>
     /// The base WebSocketService Interface.

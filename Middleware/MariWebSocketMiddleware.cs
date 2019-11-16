@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using MariGlobals.Class.Utils;
+using MariSocketMiddleware.Entities;
+using MariSocketMiddleware.Services;
+using MariSocketMiddleware.Utils;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
@@ -8,7 +12,7 @@ using System.Net.WebSockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MariSocketMiddleware
+namespace MariSocketMiddleware.Middleware
 {
     /// <summary>
     /// The <see cref="MariWebSocketMiddleware"/>.

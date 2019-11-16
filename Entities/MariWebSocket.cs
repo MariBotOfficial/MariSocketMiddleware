@@ -1,11 +1,13 @@
-﻿using System;
+﻿using MariSocketMiddleware.Services;
+using MariSocketMiddleware.Utils;
+using System;
 using System.Collections.Generic;
 using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MariSocketMiddleware
+namespace MariSocketMiddleware.Entities
 {
     /// <summary>
     /// Represents a WebSocket client.

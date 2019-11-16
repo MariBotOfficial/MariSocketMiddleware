@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using MariSocketMiddleware.Entities;
+using MariSocketMiddleware.Utils;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Concurrent;
@@ -9,7 +11,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MariSocketMiddleware
+namespace MariSocketMiddleware.Services
 {
     /// <summary>
     /// The base WebSocketService.

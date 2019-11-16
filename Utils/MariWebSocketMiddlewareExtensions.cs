@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using MariGlobals.Class.Utils;
+using MariSocketMiddleware.Entities;
+using MariSocketMiddleware.Middleware;
+using MariSocketMiddleware.Services;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
@@ -7,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MariSocketMiddleware
+namespace MariSocketMiddleware.Utils
 {
     /// <summary>
     /// Extensions for the MariWebSocketMiddleware package.
@@ -145,17 +149,5 @@ namespace MariSocketMiddleware
             else if (logger.HasContent())
                 logger.LogError(ex, ex.Message);
         }
-
-        internal static bool HasContent(this object obj)
-            => obj != null;
-
-        internal static bool HasNoContent(this object obj)
-            => !HasContent(obj);
-
-        internal static bool HasContent<T>(this IEnumerable<T> obj)
-            => obj != null && obj.Any();
-
-        internal static bool HasNoContent<T>(this IEnumerable<T> obj)
-            => !HasContent(obj);
     }
 }
