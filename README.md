@@ -118,6 +118,10 @@ namespace MyApi
         public MyWebSocketService(ILogger<MyWebSocketService> logger)
         {
             _logger = logger;
+            OnOpen += OpenAsync;
+            OnDisconnected += OnDisconnectedAsync;
+            OnError += OnErrorAsync;
+            OnMessage += OnMessageAsync;
         }
 
         private Task OnMessageAsync(MessageEventArgs arg)
@@ -173,4 +177,4 @@ namespace MyApi.Controllers
 ```
 
 # License
-**MariSocketMiddleware** is provided under [The GNU GPLv3 License.]([https://gitlab.com/MariBot/MariSocketMiddleware/blob/master/LICENSE](https://gitlab.com/MariBot/MariSocketMiddleware/blob/master/LICENSE))
+**MariSocketMiddleware** is provided under [The GNU GPLv3 License.](https://gitlab.com/MariBot/MariSocketMiddleware/blob/master/LICENSE)
