@@ -132,7 +132,7 @@ namespace MariSocketMiddleware.Services
             Sockets.Clear();
 
             if (!Cts.IsCancellationRequested)
-                Cts.Cancel();
+                Cts.Cancel(false);
             Cts.Dispose();
 
             IsDisposed = true;
