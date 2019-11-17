@@ -124,7 +124,18 @@ namespace MariSocketMiddleware.Middleware
             {
                 await ReadAsync(socket, service, context);
             }
-            catch (TaskCanceledException) { }
+            catch (Exception ex)
+            {
+                if (ex is TaskCanceledException)
+                    return;
+
+                await service.OnDisconnectedAsync(socket, WebSocketCloseStatus.ProtocolError, ex.ToString())
+                    .Try(_logger, service, socket, false);
+
+                await socket.WebSocket.CloseAsync(WebSocketCloseStatus.NormalClosure,
+                    "Closed by remote", service.Cts.Token)
+                    .Try(_logger, service, socket, false);
+            }
         }
 
         #endregion HandleAfterSocketAsync
@@ -138,7 +149,7 @@ namespace MariSocketMiddleware.Middleware
             {
                 var buffer = service.Buffer;
                 var result = await socket.WebSocket.ReceiveAsync(buffer, service.Cts.Token)
-                    .Try(_logger, service, socket, false);
+                    .Try(_logger, service, socket);
 
                 if (result.HasNoContent())
                     continue;
