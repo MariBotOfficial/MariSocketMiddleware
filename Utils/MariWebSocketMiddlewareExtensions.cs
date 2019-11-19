@@ -98,14 +98,8 @@ namespace MariSocketMiddleware.Utils
         internal static async Task Try<T>
             (this Task task, ILogger<T> logger, MariBaseWebSocketService service, MariWebSocket socket, bool cancel = true)
         {
-            try
-            {
-                await task;
-            }
-            catch (Exception ex)
-            {
-                await HandleExceptionFromTryAsync(ex, logger, service, socket, cancel);
-            }
+            await task
+                .TryAsync((ex) => HandleExceptionFromTryAsync(ex, logger, service, socket, cancel));
         }
 
         /// <summary>
@@ -125,18 +119,8 @@ namespace MariSocketMiddleware.Utils
         internal static async Task<TResult> Try<T, TResult>
             (this Task<TResult> task, ILogger<T> logger, MariBaseWebSocketService service, MariWebSocket socket, bool cancel = true)
         {
-            try
-            {
-                var memResult =
-                    new ReadOnlyMemory<TResult>(new TResult[] { await task });
-
-                return memResult.Span[0];
-            }
-            catch (Exception ex)
-            {
-                await HandleExceptionFromTryAsync(ex, logger, service, socket, cancel);
-            }
-            return default;
+            return await task
+                .TryAsync((ex) => HandleExceptionFromTryAsync(ex, logger, service, socket, cancel));
         }
 
         private static async Task HandleExceptionFromTryAsync<T>
