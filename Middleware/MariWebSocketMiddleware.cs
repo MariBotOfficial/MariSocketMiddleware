@@ -129,12 +129,13 @@ namespace MariSocketMiddleware.Middleware
                 if (ex is TaskCanceledException)
                     return;
 
-                await service.OnDisconnectedAsync(socket, WebSocketCloseStatus.ProtocolError, ex.ToString())
+                await service.OnDisconnectedAsync(socket, WebSocketCloseStatus.ProtocolError, ex.Message)
                     .Try(_logger, service, socket, false);
 
-                await socket.WebSocket.CloseAsync(WebSocketCloseStatus.NormalClosure,
-                    "Closed by remote", service.Cts.Token)
-                    .Try(_logger, service, socket, false);
+                if (socket.WebSocket.State.Equals(WebSocketState.Open))
+                    await socket.WebSocket.CloseAsync(WebSocketCloseStatus.NormalClosure,
+                        "Closed by remote", service.Cts.Token)
+                        .Try(_logger, service, socket, false);
             }
         }
 
