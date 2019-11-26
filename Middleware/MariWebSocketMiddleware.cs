@@ -1,4 +1,4 @@
-﻿using MariGlobals.Class.Utils;
+﻿using MariGlobals.Utils;
 using MariSocketMiddleware.Entities;
 using MariSocketMiddleware.Services;
 using MariSocketMiddleware.Utils;
