@@ -40,10 +40,14 @@ namespace MariSocketMiddleware.Services
         /// </summary>
         public bool IsDisposed { get; private set; } = false;
 
-        /// <inheritdoc/>
+        /// <summary>The path used for your service, if you don't wanna one put "\".</summary>
         public abstract string Path { get; set; }
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// The method used for Authorize the requests.
+        /// </summary>
+        /// <param name="context">The Request Context.</param>
+        /// <returns>A boolean where true if the request is authorized and false if not.</returns>
         public abstract Task<bool> AuthorizeAsync(HttpContext context);
 
         /// <summary>
