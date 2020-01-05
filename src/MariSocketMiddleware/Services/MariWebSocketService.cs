@@ -5,6 +5,7 @@ using MariSocketMiddleware.Entities.MariEventArgs;
 using MariSocketMiddleware.Entities;
 using ErrorEventArgs = MariSocketMiddleware.Entities.MariEventArgs.ErrorEventArgs;
 using MariGlobals.Event.Concrete;
+using Microsoft.AspNetCore.Http;
 
 namespace MariSocketMiddleware.Services
 {
@@ -68,8 +69,8 @@ namespace MariSocketMiddleware.Services
 
         private readonly AsyncEvent<MessageEventArgs> _onMessage;
 
-        internal override Task OnOpenAsync(MariWebSocket socket)
-                => _onOpen.InvokeAsync(new OpenEventArgs(socket));
+        internal override Task OnOpenAsync(MariWebSocket socket, HttpContext context)
+                => _onOpen.InvokeAsync(new OpenEventArgs(socket, context));
 
         internal override Task OnErrorAsync(Exception exception, MariWebSocket socket)
                 => _onError.InvokeAsync(new ErrorEventArgs(exception, socket));

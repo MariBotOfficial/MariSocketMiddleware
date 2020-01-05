@@ -52,5 +52,14 @@ namespace MariSocketMiddleware.Entities
                 Encoding.UTF8.GetBytes(message), WebSocketMessageType.Text, true, _token)
                 .Try<MariWebSocket>(null, _service, this, false);
         }
+
+        /// <summary>
+        /// Closes the websocket connection.
+        /// </summary>
+        /// <param name="status">The <see cref="WebSocketCloseStatus"/>.</param>
+        /// <param name="reason">The reason of the close.</param>
+        /// <returns></returns>
+        public Task CloseAsync(WebSocketCloseStatus status, string reason)
+            => WebSocket.CloseAsync(status, reason, CancellationToken.None);
     }
 }

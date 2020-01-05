@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -9,14 +10,20 @@ namespace MariSocketMiddleware.Entities.MariEventArgs
     /// </summary>
     public class OpenEventArgs : EventArgs
     {
-        internal OpenEventArgs(MariWebSocket socket)
+        internal OpenEventArgs(MariWebSocket socket, HttpContext context)
         {
             WebSocket = socket;
+            Context = context;
         }
 
         /// <summary>
         /// The WebSocketClient who connected in this server.
         /// </summary>
         public MariWebSocket WebSocket { get; }
+
+        /// <summary>
+        /// The HttpContext of this new WebSocket connection.
+        /// </summary>
+        public HttpContext Context { get; }
     }
 }

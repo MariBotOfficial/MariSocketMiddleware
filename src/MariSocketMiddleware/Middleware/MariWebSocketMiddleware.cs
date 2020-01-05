@@ -117,7 +117,7 @@ namespace MariSocketMiddleware.Middleware
 
             service.AddClient(socket);
 
-            await service.OnOpenAsync(socket)
+            await service.OnOpenAsync(socket, context)
                 .Try(_logger, service, socket, false);
 
             try
