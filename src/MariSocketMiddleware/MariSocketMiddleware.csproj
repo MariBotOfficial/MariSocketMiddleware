@@ -11,7 +11,7 @@
     <Copyright>2019 - 2020 renanrcp. All rights reserved.</Copyright>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageIcon>mmiddleware.jpg.png</PackageIcon>
+    <PackageIcon>mmiddleware.jpg</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
