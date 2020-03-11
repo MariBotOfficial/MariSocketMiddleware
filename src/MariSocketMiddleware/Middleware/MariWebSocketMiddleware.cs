@@ -52,23 +52,29 @@ namespace MariSocketMiddleware.Middleware
                 return;
             };
 
+            var service = _services.GetServices<IMariWebSocketService>()
+                .Select(a => a as MariBaseWebSocketService)
+                .Where(a => context.Request.Path.Equals(a.Path, StringComparison.OrdinalIgnoreCase))
+                .FirstOrDefault();
+
+            if (service.HasNoContent())
+            {
+                await _next(context);
+                return;
+            }
+
             _logger.LogInformation("Received a WebSocket request.");
             _logger.LogTrace($"Incoming WebSocket request from " +
                 $"{context.Connection.RemoteIpAddress}:{context.Connection.RemotePort}.");
-            await HandleBeforeSocketAsync(context);
+            await HandleBeforeSocketAsync(context, service);
         }
 
         #endregion Invoke
 
         #region HandleBeforeSocketAsync
 
-        private async Task HandleBeforeSocketAsync(HttpContext context)
+        private async Task HandleBeforeSocketAsync(HttpContext context, MariBaseWebSocketService service)
         {
-            var service = _services.GetServices<IMariWebSocketService>()
-                .Select(a => a as MariBaseWebSocketService)
-                .Where(a => context.Request.Path.Equals(a.Path, StringComparison.OrdinalIgnoreCase))
-                .FirstOrDefault();
-
             if (service.HasNoContent())
             {
                 _logger.LogInformation($"No WebSocketService found for the request path:" +
@@ -112,12 +118,12 @@ namespace MariSocketMiddleware.Middleware
         private async Task HandleAfterSocketAsync
             (WebSocket nativeSocket, MariBaseWebSocketService service, HttpContext context)
         {
-            var socket = new MariWebSocket(nativeSocket, service.Cts.Token, service);
+            using var socket = new MariWebSocket(nativeSocket, service.Cts.Token, service);
             _logger.LogDebug($"The new WebSocket has the Id: {socket.Id}");
 
             service.AddClient(socket);
 
-            await service.OnOpenAsync(socket)
+            await service.OnOpenAsync(socket, context)
                 .Try(_logger, service, socket, false);
 
             try

@@ -54,8 +54,9 @@ namespace MariSocketMiddleware.Services
         /// Indicates when a WebSocket connection is successfully opened.
         /// </summary>
         /// <param name="webSocket">The <see cref="MariWebSocket"/> connected.</param>
+        /// <param name="context">The Request Context.</param>
         /// <returns></returns>
-        internal abstract Task OnOpenAsync(MariWebSocket webSocket);
+        internal abstract Task OnOpenAsync(MariWebSocket webSocket, HttpContext context);
 
         /// <summary>
         /// Indicates when an error occurs.
