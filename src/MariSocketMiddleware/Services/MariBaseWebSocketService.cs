@@ -40,7 +40,7 @@ namespace MariSocketMiddleware.Services
         /// </summary>
         public bool IsDisposed { get; private set; } = false;
 
-        /// <summary>The path used for your service, if you don't wanna one put "\".</summary>
+        /// <summary>The path used for your service, if you don't wanna one put "/".</summary>
         public abstract string Path { get; set; }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace MariSocketMiddleware.Services
         /// Indicates when a WebSocket connection is successfully opened.
         /// </summary>
         /// <param name="webSocket">The <see cref="MariWebSocket"/> connected.</param>
-        /// <param name="context">The Request Context.</param>
+        /// <param name="context">The context of the new connection.</param>
         /// <returns></returns>
         internal abstract Task OnOpenAsync(MariWebSocket webSocket, HttpContext context);
 
@@ -117,6 +117,15 @@ namespace MariSocketMiddleware.Services
         /// <returns>An IReadOnlyCollection with all clients connecteds in this service.</returns>
         protected IReadOnlyCollection<MariWebSocket> GetAllClients()
             => Sockets.Values.ToHashSet();
+
+        /// <summary>
+        /// Try get a client with the specific id.
+        /// </summary>
+        /// <param name="id">The id of the <see cref="MariWebSocket"/>.</param>
+        /// <param name="webSocket">The <see cref="MariWebSocket"/> instance.</param>
+        /// <returns>A <see cref="bool"/> representing if this client exists or no.</returns>
+        protected bool TryGetClient(string id, out MariWebSocket webSocket)
+            => Sockets.TryGetValue(id, out webSocket);
 
         /// <summary>
         /// Dispose that service instance.

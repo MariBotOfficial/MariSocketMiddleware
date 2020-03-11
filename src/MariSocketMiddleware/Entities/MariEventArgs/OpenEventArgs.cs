@@ -22,8 +22,8 @@ namespace MariSocketMiddleware.Entities.MariEventArgs
         public MariWebSocket WebSocket { get; }
 
         /// <summary>
-        /// The Request Context.
+        /// The HttpContext of this new WebSocket connection.
         /// </summary>
-        public HttpContext Context { get; set; }
+        public HttpContext Context { get; }
     }
 }
