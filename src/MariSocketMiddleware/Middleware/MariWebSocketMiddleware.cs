@@ -143,6 +143,7 @@ namespace MariSocketMiddleware.Middleware
                         "Closed by remote", service.Cts.Token)
                         .Try(_logger, service, socket, false);
             }
+            nativeSocket.Dispose();
         }
 
         #endregion HandleAfterSocketAsync
