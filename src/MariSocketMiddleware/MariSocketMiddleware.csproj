@@ -4,7 +4,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PackageId>MariSocketMiddleware</PackageId>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
     <Authors>renanrcp</Authors>
     <Company>MariBot</Company>
     <Description>Mari ASP.NET Core Middleware Event-based for WebSockets with low memory usage.</Description>
