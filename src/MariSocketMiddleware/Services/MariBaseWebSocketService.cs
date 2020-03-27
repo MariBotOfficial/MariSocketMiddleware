@@ -91,7 +91,7 @@ namespace MariSocketMiddleware.Services
         /// <returns></returns>
         protected async Task SendMessageToAllAsync(string message)
         {
-            foreach (var client in Sockets.Values)
+            foreach (var client in Sockets.Values.ToList())
                 await client.SendAsync(message)
                     .Try<MariBaseWebSocketService>(null, this, client, false);
         }

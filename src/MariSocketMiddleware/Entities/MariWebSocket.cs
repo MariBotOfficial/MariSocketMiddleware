@@ -18,7 +18,7 @@ namespace MariSocketMiddleware.Entities
         /// <summary>
         /// The unique identifier for this WebSocket.
         /// </summary>
-        public readonly string Id;
+        public string Id { get; }
 
         internal readonly WebSocket WebSocket;
 

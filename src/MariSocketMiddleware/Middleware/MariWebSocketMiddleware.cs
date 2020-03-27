@@ -177,8 +177,6 @@ namespace MariSocketMiddleware.Middleware
             if (!result.EndOfMessage)
                 return;
 
-            Array.Resize(ref buffer, Array.FindLastIndex(buffer, a => a != 0) + 1);
-
             _logger.LogTrace($"Incoming WebSocket message from " +
                 $"{context.Connection.RemoteIpAddress}:{context.Connection.RemotePort}.");
             _logger.LogDebug($"Received WebSocket message from client's id: {socket.Id}");
