@@ -155,7 +155,7 @@ namespace MariSocketMiddleware.Middleware
         {
             while (socket.WebSocket.State == WebSocketState.Open)
             {
-                var buffer = service.Buffer;
+                var buffer = new byte[service.BufferLength];
                 var result = await socket.WebSocket.ReceiveAsync(buffer, service.Cts.Token)
                     .Try(_logger, service, socket);
 

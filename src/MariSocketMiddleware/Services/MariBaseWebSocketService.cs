@@ -33,7 +33,7 @@ namespace MariSocketMiddleware.Services
         /// <summary>
         /// Indicates the buffer to read the WebSockets messages, the default is 512.
         /// </summary>
-        public byte[] Buffer { get; protected set; } = new byte[512];
+        public ushort BufferLength { get; protected set; } = 512;
 
         /// <summary>
         /// Indicates if this service is disposed.
