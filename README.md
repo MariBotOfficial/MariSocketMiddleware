@@ -2,12 +2,13 @@
 
 An ASP.NET Core Middleware Event-based for multiple WebSockets services with easy and low memory usage.
 
-
 # Usage
+
 **MariSocketMiddleware** is very easy to use, just implement that in your ASP.NET core project.
 
 ## Service class
-```csharp 
+
+```csharp
 using MariSocketMiddleware.Entities.MariEventArgs;
 using MariSocketMiddleware.Services;
 using Microsoft.AspNetCore.Http;
@@ -44,6 +45,7 @@ namespace MyApi
     }
 }
 ```
+
 ## In Startup.cs
 
 ```csharp
@@ -99,8 +101,11 @@ namespace MyApi
 ```
 
 ## Additional
+
 Your service will be injected in the ASP.NET Core D.I, therefore you can get your service instance or get others services in your service.
+
 ### Getting other dependencie
+
 ```csharp
 using MariSocketMiddleware.Entities.MariEventArgs;
 using MariSocketMiddleware.Services;
@@ -145,7 +150,9 @@ namespace MyApi
 ```
 
 ### Getting your service
+
 You can just pass your service in other service ctor or do a IServiceProvider#GetService.
+
 ```csharp
 using System;
 using Microsoft.AspNetCore.Mvc;
@@ -177,4 +184,5 @@ namespace MyApi.Controllers
 ```
 
 # License
-**MariSocketMiddleware** is provided under [The GNU GPLv3 License.](https://gitlab.com/MariBot/MariSocketMiddleware/blob/master/LICENSE)
+
+**MariSocketMiddleware** is provided under [The MIT License.](https://github.com/MariBotOfficial/MariSocketMiddleware/blob/master/LICENSE)
